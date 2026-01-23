@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Radio Switcher</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Arial; padding: 20px; }
+    button { font-size: 18px; padding: 10px 14px; margin-right: 10px; }
+    #name { font-size: 22px; margin: 0 0 12px; }
+    #hint { opacity: .7; font-size: 14px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1 id="name">—</h1>
+
+  <audio id="player" controls></audio>
+
+  <div style="margin-top:14px;">
+    <button id="prev">◀ Prev</button>
+    <button id="next">Next ▶</button>
+  </div>
+
+  <div id="hint">Если не играет — значит ссылка не на поток (нужен .mp3/.aac/.ogg/.m3u), или станция защищает стрим.</div>
+
+  <script>
+    // 1) ВОТ ТУТ ТВОИ СТАНЦИИ (замени на свои)
+    const stations = [
+      { name: "Station 1", url: "https://example.com/stream.mp3" },
+      { name: "Station 2", url: "https://example.com/live.aac" }
+    ];
+
+    const player = document.getElementById("player");
+    const nameEl = document.getElementById("name");
+    let i = 0;
+
+    function play(idx) {
+      i = (idx + stations.length) % stations.length;
+      const s = stations[i];
+      nameEl.textContent = s.name;
+      player.src = s.url;
+
+      // На айфоне автозапуск часто блочится — поэтому просто меняем src,
+      // а ты жмёшь Play один раз (дальше обычно норм).
+      player.play().catch(() => {});
+    }
+
+    document.getElementById("next").onclick = () => play(i + 1);
+    document.getElementById("prev").onclick = () => play(i - 1);
+
+    play(0);
+  </script>
+</body>
+</html>
