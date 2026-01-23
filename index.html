@@ -21,7 +21,7 @@
     <button id="next">Next ▶</button>
   </div>
 
-  <div id="hint">Если не играет — значит ссылка не на поток (нужен .mp3/.aac/.ogg/.m3u), или станция защищает стрим.</div>
+  <div id="hint"></div>
 
   <script>
     // 1) ВОТ ТУТ ТВОИ СТАНЦИИ (замени на свои)
@@ -37,8 +37,23 @@
 
     const player = document.getElementById("player");
     const nameEl = document.getElementById("name");
+    const hintEl = document.getElementById("hint");
     let i = 0;
 
+  function loadAnekdot() {
+    // очистить контейнер
+    hintEl.innerHTML = "";
+
+    // сколько анекдотов показывать (1..5)
+    window.anekdot_count = 1;
+
+    // важно: через создание <script>, иначе не выполнится
+    const s = document.createElement("script");
+    s.src = "https://www.anekdot.ru/rss/randomu.html";
+    s.charset = "utf-8";
+    hintEl.appendChild(s);
+  }
+    
     function play(idx) {
       i = (idx + stations.length) % stations.length;
       const s = stations[i];
@@ -48,8 +63,9 @@
       // На айфоне автозапуск часто блочится — поэтому просто меняем src,
       // а ты жмёшь Play один раз (дальше обычно норм).
       player.play().catch(() => {});
+      loadAnekdot(); // <- обновляем анекдот при переключении
     }
-
+    
     document.getElementById("next").onclick = () => play(i + 1);
     document.getElementById("prev").onclick = () => play(i - 1);
 
@@ -57,5 +73,6 @@
   </script>
 </body>
 </html>
+
 
 
