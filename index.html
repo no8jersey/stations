@@ -6,21 +6,35 @@
   <title>Radio Switcher</title>
   <style>
     body {
-  font-family: system-ui, -apple-system, Arial;
-  padding: 15px;
-  margin: 0;
+      font-family: system-ui, -apple-system, Arial;
+      padding: 15px;
+      margin: 0;
+      background-image: url("IMG_4432.jpeg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: white;
+    }
 
-  background-image: url("IMG_4432.jpeg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+    button {
+      font-size: 18px;
+      padding: 10px 14px;
+      margin-right: 10px;
+    }
 
-  color: white;
-}
-    button { font-size: 18px; padding: 10px 14px; margin-right: 10px; }
-    #name { font-size: 22px; margin: 0 0 12px; }
-    #hint { opacity: .7; font-size: 14px; margin-top: 10px; }
+    #name {
+      font-size: 22px;
+      margin: 0 0 12px;
+    }
+
+    #desc {
+      font-size: 14px;
+      font-style: italic;
+      margin-top: 8px;
+      margin-bottom: 14px;
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
@@ -28,71 +42,49 @@
 
   <audio id="player" controls></audio>
 
+  <div id="desc">—</div>
+
   <div style="margin-top:14px;">
     <button id="prev">◀ Prev</button>
     <button id="next">Next ▶</button>
   </div>
 
-  <div id="hint"></div>
-
   <script>
-    // 1) ВОТ ТУТ ТВОИ СТАНЦИИ (замени на свои)
     const stations = [
-      { name: "kurs ", url: "https://listen9.myradio24.com/kursradio" },
-      { name: "oto", url: "https://listen1.myradio24.com/7859" },
-      { name: "rudina", url: "https://azuracast.datea.services:8000/radio.mp3" },
-      { name: "noods", url: "https://noods-radio.radiocult.fm/stream" },
-      { name: "mutant", url: "https://listen.radioking.com/radio/282820/stream/328621" },
-      { name: "nts 1", url: "https://stream-relay-geo.ntslive.net/stream" },
-      { name: "nts 2", url: "https://stream-relay-geo.ntslive.net/stream2" },
-      { name: "skc", url: "https://skc.fm/listen/skc_radio/skc_hiq.mp3" },
-      { name: "the lot", url: "https://nyc-prod-catalyst-0.lp-playback.studio/hls/video+85c28sa2o8wppm58/index.m3u8" },
-      { name: "kiosk", url: "https://kioskradiobxl.out.airtime.pro/kioskradiobxl_b" }
+      { name: "kurs", url: "https://listen9.myradio24.com/kursradio", description: "Lorem ipsum dolor sit amet." },
+      { name: "oto", url: "https://listen1.myradio24.com/7859", description: "Lorem ipsum dolor sit amet." },
+      { name: "rudina", url: "https://azuracast.datea.services:8000/radio.mp3", description: "Lorem ipsum dolor sit amet." },
+      { name: "noods", url: "https://noods-radio.radiocult.fm/stream", description: "Lorem ipsum dolor sit amet." },
+      { name: "mutant", url: "https://listen.radioking.com/radio/282820/stream/328621", description: "Lorem ipsum dolor sit amet." },
+      { name: "nts 1", url: "https://stream-relay-geo.ntslive.net/stream", description: "Lorem ipsum dolor sit amet." },
+      { name: "nts 2", url: "https://stream-relay-geo.ntslive.net/stream2", description: "Lorem ipsum dolor sit amet." },
+      { name: "skc", url: "https://skc.fm/listen/skc_radio/skc_hiq.mp3", description: "Lorem ipsum dolor sit amet." },
+      { name: "the lot", url: "https://nyc-prod-catalyst-0.lp-playback.studio/hls/video+85c28sa2o8wppm58/index.m3u8", description: "Lorem ipsum dolor sit amet." },
+      { name: "kiosk", url: "https://kioskradiobxl.out.airtime.pro/kioskradiobxl_b", description: "Lorem ipsum dolor sit amet." }
     ];
 
     const player = document.getElementById("player");
     const nameEl = document.getElementById("name");
-    const hintEl = document.getElementById("hint");
+    const descEl = document.getElementById("desc");
+
     let i = 0;
 
-  function loadAnekdot() {
-    // очистить контейнер
-    hintEl.innerHTML = "";
-
-    // сколько анекдотов показывать (1..5)
-    window.anekdot_count = 1;
-
-    // важно: через создание <script>, иначе не выполнится
-    const s = document.createElement("script");
-    s.src = "https://www.anekdot.ru/rss/randomu.html";
-    s.charset = "utf-8";
-    hintEl.appendChild(s);
-  }
-    
     function play(idx) {
       i = (idx + stations.length) % stations.length;
       const s = stations[i];
+
       nameEl.textContent = s.name;
+      descEl.textContent = s.description;
       player.src = s.url;
 
-      // На айфоне автозапуск часто блочится — поэтому просто меняем src,
-      // а ты жмёшь Play один раз (дальше обычно норм).
       player.play().catch(() => {});
-      loadAnekdot(); // <- обновляем анекдот при переключении
     }
-    
+
     document.getElementById("next").onclick = () => play(i + 1);
     document.getElementById("prev").onclick = () => play(i - 1);
 
-    play(0);
+    const randomIndex = Math.floor(Math.random() * stations.length);
+    play(randomIndex);
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
